@@ -4,6 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -14,6 +16,8 @@ public class Author {
     private long id;
     private String firstName;
     private String lastName;
+
+    @ManyToMany(mappedBy = "author")
     private Set<Book> book;
 
     public Author() {
@@ -55,5 +59,18 @@ public class Author {
 
     public void setBook(Set<Book> book) {
         this.book = book;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Author)) return false;
+        Author author = (Author) o;
+        return getId() == author.getId();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }
