@@ -5,9 +5,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -17,13 +18,25 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     long id;
+
     String title;
     String isbn;
 
+    @ManyToOne
+    private Publisher publisher;
+
+    public Publisher getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(Publisher publisher) {
+        this.publisher = publisher;
+    }
+
     @ManyToMany
-    @JoinTable(name="author_book", joinColumns = @JoinColumn(name = "book_id"),
+    @JoinTable(name = "author_book", joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id"))
-    Set<Author> author;
+    Set<Author> author = new HashSet<>();
 
     public Book() {
     }
@@ -36,10 +49,9 @@ public class Book {
         this.id = id;
     }
 
-    public Book(String title, String isbn, Set<Author> author) {
+    public Book(String title, String isbn) {
         this.title = title;
         this.isbn = isbn;
-        this.author = author;
     }
 
     public String getTitle() {
